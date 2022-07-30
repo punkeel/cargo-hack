@@ -64,7 +64,8 @@ fn exec_on_workspace(cx: &Context) -> Result<()> {
     let mut keep_going = KeepGoing::default();
     if let Some(range) = &cx.version_range {
         progress.total *= range.len();
-        let line = cmd!("cargo");
+        let mut line = cmd!("rustup");
+        line.leading_arg("run");
         {
             // First, generate the lockfile using the oldest cargo specified.
             // https://github.com/taiki-e/cargo-hack/issues/105
@@ -72,6 +73,7 @@ fn exec_on_workspace(cx: &Context) -> Result<()> {
             rustup::install_toolchain(toolchain, cx.target.as_deref(), true)?;
             let mut line = line.clone();
             line.leading_arg(toolchain);
+            line.leading_arg("cargo");
             line.arg("generate-lockfile");
             if let Some(pid) = cx.current_package() {
                 let package = cx.packages(pid);
@@ -97,6 +99,7 @@ fn exec_on_workspace(cx: &Context) -> Result<()> {
 
             let mut line = line.clone();
             line.leading_arg(toolchain);
+            line.leading_arg("cargo");
             line.apply_context(cx);
             packages.iter().try_for_each(|(id, kind)| {
                 exec_on_package(cx, id, kind, &line, &mut progress, &mut keep_going)

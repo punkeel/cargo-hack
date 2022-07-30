@@ -1305,13 +1305,12 @@ fn default_feature_behavior() {
         .stdout_not_contains("has default feature!");
 }
 
-#[cfg_attr(windows, ignore)] // rustup bug: https://github.com/rust-lang/rustup/issues/3036
 #[test]
 fn version_range() {
     cargo_hack(["check", "--version-range", "1.58..1.59"]).assert_success("real").stderr_contains(
         "
-        running `cargo +1.58 check` on real (1/2)
-        running `cargo +1.59 check` on real (2/2)
+        running `rustup run 1.58 cargo check` on real (1/2)
+        running `rustup run 1.59 cargo check` on real (2/2)
         ",
     );
 
@@ -1319,8 +1318,8 @@ fn version_range() {
         .assert_success("real")
         .stderr_contains(format!(
             "
-            running `cargo +1.58 check --target {0}` on real (1/2)
-            running `cargo +1.59 check --target {0}` on real (2/2)
+            running `rustup run 1.58 cargo check --target {0}` on real (1/2)
+            running `rustup run 1.59 cargo check --target {0}` on real (2/2)
             ",
             *TARGET
         ));
@@ -1336,8 +1335,8 @@ fn version_range() {
         .assert_success("real")
         .stderr_contains(
             "
-            running `cargo +1.58 check --target x86_64-unknown-linux-musl` on real (1/2)
-            running `cargo +1.59 check --target x86_64-unknown-linux-musl` on real (2/2)
+            running `rustup run 1.58 cargo check --target x86_64-unknown-linux-musl` on real (1/2)
+            running `rustup run 1.59 cargo check --target x86_64-unknown-linux-musl` on real (2/2)
             ",
         );
     }

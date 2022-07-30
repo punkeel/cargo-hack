@@ -51,7 +51,8 @@ impl Metadata {
         let mut cargo_version = cargo::minor_version(cmd!(cargo))
             .map_err(|e| warn!("unable to determine cargo version: {:#}", e))
             .unwrap_or(0);
-        let stable_cargo_version = cargo::minor_version(cmd!("cargo", "+stable")).unwrap_or(0);
+        let stable_cargo_version =
+            cargo::minor_version(cmd!("rustup", "run", "stable", "cargo")).unwrap_or(0);
 
         let mut cmd;
         let json = if stable_cargo_version > cargo_version {
@@ -78,7 +79,7 @@ impl Metadata {
             // Try with stable cargo because if workspace member has
             // a dependency that requires newer cargo features, `cargo metadata`
             // with older cargo may fail.
-            cmd = cmd!("cargo", "+stable", "metadata", "--format-version=1");
+            cmd = cmd!("rustup", "run", "stable", "cargo", "metadata", "--format-version=1");
             if let Some(manifest_path) = &args.manifest_path {
                 cmd.arg("--manifest-path");
                 cmd.arg(manifest_path);

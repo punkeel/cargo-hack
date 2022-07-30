@@ -12,6 +12,10 @@ integration.
   - [--each-feature](#--each-feature)
   - [--feature-powerset](#--feature-powerset)
   - [Options for adjusting the behavior of --each-feature and --feature-powerset](#options-for-adjusting-the-behavior-of---each-feature-and---feature-powerset)
+    - [--optional-deps](#--optional-deps)
+    - [--exclude-features, --skip](#--exclude-features---skip)
+    - [--depth](#--depth)
+    - [--group-features](#--group-features)
   - [--version-range](#--version-range)
   - [Improvement of the behavior of existing cargo flags](#improvement-of-the-behavior-of-existing-cargo-flags)
 - [Installation](#installation)
@@ -282,9 +286,9 @@ Perform commands on a specified (inclusive) range of Rust versions.
 
 ```console
 $ cargo hack check --version-range 1.46..1.47
-info: running `cargo +1.46 check` on cargo-hack (1/2)
+info: running `rustup run 1.46 cargo check` on cargo-hack (1/2)
 ...
-info: running `cargo +1.47 check` on cargo-hack (2/2)
+info: running `rustup run 1.47 cargo check` on cargo-hack (2/2)
 ...
 ```
 
@@ -350,12 +354,14 @@ This also works as a workaround for [rust-clippy#4612].
 
 `cargo-hack` changes the behavior of the following existing flags.
 
+<!-- omit in toc -->
 #### --features, --no-default-features
 
 Unlike `cargo` ([cargo#3620], [cargo#4106], [cargo#4463], [cargo#4753],
 [cargo#5015], [cargo#5364], [cargo#6195]), it can also be applied to
 sub-crates.
 
+<!-- omit in toc -->
 #### --all, --workspace
 
 Perform command for all packages in the workspace.
